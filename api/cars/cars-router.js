@@ -1,3 +1,7 @@
+const knex = require("knex")
+
+const db = require("../../data/db-config")
+
 // DO YOUR MAGIC
 const express = require("express")
 const Cars = require("../cars/cars-model")
