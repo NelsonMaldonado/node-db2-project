@@ -18,16 +18,54 @@ const checkCarPayload = (req, res, next) => {
   if (vin === undefined) {
     next({
       status: 400,
+      message: " vin is missing",
     })
+  } else if (make === undefined) {
+    next({
+      status: 400,
+      message: "make is missing",
+    })
+  } else if (model === undefined) {
+    next({
+      status: 400,
+      message: "model is missing",
+    })
+  } else if (mileage === undefined) {
+    next({
+      status: 400,
+      message: "mileage is missing",
+    })
+  } else {
+    next()
   }
 }
 
 const checkVinNumberValid = (req, res, next) => {
-  // DO YOUR MAGIC
+  const { vin } = req.body
+  if (vinValidator.validate(vin)) {
+    next()
+  } else {
+    next({
+      status: 400,
+      message: `vin ${vin} is invalid`,
+    })
+  }
 }
 
-const checkVinNumberUnique = (req, res, next) => {
-  // DO YOUR MAGIC
+const checkVinNumberUnique = async (req, res, next) => {
+  try {
+    const vin = await Cars.getByVin(req.body.vin)
+    if (vin) {
+      next({
+        status: 400,
+        message: `vin ${req.body.vin} already exists`,
+      })
+    } else {
+      next()
+    }
+  } catch (err) {
+    next(err)
+  }
 }
 
 module.export = {
