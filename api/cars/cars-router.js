@@ -13,15 +13,31 @@ router.get("/", (req, res) => {
       res.json(car)
     })
     .catch((err) => {
-      res.status(500).json({ message: "could not get cars" })
+      res.status(500).json({ message: err.message })
     })
 })
 
 router.get("/:id", (req, res) => {
-  res.send("getting buy id working well")
+  Cars.getById(req.params.id)
+    .then((car) => {
+      if (car) {
+        res.json(car)
+      } else {
+        res.status(404).json({ message: "faild to find car by id" })
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message })
+    })
 })
 
 router.post("/", (req, res) => {
-  res.send("Posted data")
+  Cars.create(req.body)
+    .then((car) => {
+      res.status(201).json(car)
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message })
+    })
 })
 module.exports = router
