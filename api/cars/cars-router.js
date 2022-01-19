@@ -21,4 +21,7 @@ router.get("/:id", (req, res) => {
   res.send("getting buy id working well")
 })
 
+router.post("/", (req, res) => {
+  res.send("Posted data")
+})
 module.exports = router
