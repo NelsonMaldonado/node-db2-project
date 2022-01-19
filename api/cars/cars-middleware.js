@@ -1,9 +1,25 @@
+const Cars = require("./cars-model")
+const vinValidator = require("vin-validator")
+
 const checkCarId = (req, res, next) => {
-  // DO YOUR MAGIC
+  const { id } = req.params
+  Cars.getById(id).then((car) => {
+    if (car) {
+      req.carFromDb = car
+      next()
+    } else {
+      next({ status: 404, message: `car with id ${id} is not found` })
+    }
+  })
 }
 
 const checkCarPayload = (req, res, next) => {
-  // DO YOUR MAGIC
+  const { vin, make, model, mileage } = req.body
+  if (vin === undefined) {
+    next({
+      status: 400,
+    })
+  }
 }
 
 const checkVinNumberValid = (req, res, next) => {
@@ -12,4 +28,11 @@ const checkVinNumberValid = (req, res, next) => {
 
 const checkVinNumberUnique = (req, res, next) => {
   // DO YOUR MAGIC
+}
+
+module.export = {
+  checkCarId,
+  checkCarPayload,
+  checkVinNumberValid,
+  checkVinNumberUnique,
 }
